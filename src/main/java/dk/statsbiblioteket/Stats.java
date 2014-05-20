@@ -75,7 +75,7 @@ public class Stats {
             final double diff = mean - vals[i];
             squareDiffSum += diff*diff;
         }
-        return squareDiffSum / (end-start); // TODO: Consider switch for larger sample subset toggling (end-start-1)
+        return squareDiffSum / (end-start-1); // TODO: Consider if n-1 (end-start-1) is the right solution
     }
 
     /**

@@ -61,14 +61,17 @@ public class ResizeDetect {
     }
 
     public AnalysisResult analyze(File image) throws IOException {
-        return analyze(image, ImageIO.read(image));
+        return analyze2x2(image, ImageIO.read(image));
     }
 
-    private AnalysisResult analyze(File imageFile, BufferedImage image) {
+    private AnalysisResult analyze2x2(File imageFile, BufferedImage image) {
         final int RECT_WIDTH = 2;
         final int RECT_HEIGHT = 2;
         final long[][] rectRGB = new long[3][RECT_WIDTH*RECT_HEIGHT];
-        final double[] maxCache = new double[RECT_WIDTH*RECT_HEIGHT];
+        final int a = 0;
+        final int b = 1;
+        final int c = 2;
+        final int d = 3;
 
         StringBuilder sb = new StringBuilder();
 
@@ -76,7 +79,13 @@ public class ResizeDetect {
         for (int offsetX = 0 ; offsetX < RECT_WIDTH ; offsetX++) {
             for (int offsetY = 0 ; offsetY < RECT_HEIGHT ; offsetY++) {
                 sb.append(String.format(" - offset: (%d, %d)\n", offsetX, offsetY));
-                double sumMaxDeviation = 0.0;
+
+                // AB
+                // CD
+                double sumMaxDeviationABCD = 0.0;
+                double sumMaxDeviationAB_CD = 0.0;
+                double sumMaxDeviationAC_BD = 0.0;
+
                 // Iterate over all the rectangles in the image
                 // We ignore the last row and column if they are 1 pixel wide
                 int blockCount = 0;
@@ -93,17 +102,36 @@ public class ResizeDetect {
                                 rectRGB[2][index++] = clr & 0x000000ff;         // blue
                             }
                         }
-                        for (int channel = 0 ; channel < 3 ; channel++) {
-                            maxCache[channel] = Stats.standardDeviation(rectRGB[channel]);
-                        }
-                        sumMaxDeviation += Stats.max(maxCache);
+                        sumMaxDeviationABCD += getMaxDeviation(rectRGB, a, b, c, d);
+                        sumMaxDeviationAB_CD += (getMaxDeviation(rectRGB, a, b) + getMaxDeviation(rectRGB, c, d)) / 2;
+                        sumMaxDeviationAC_BD += (getMaxDeviation(rectRGB, a, c) + getMaxDeviation(rectRGB, b, d)) / 2;
                     }
                 }
-                sb.append(String.format("   average max deviation per channel within each block: %f\n",
-                                        sumMaxDeviation / blockCount));
+                sb.append(String.format(
+                        "   average max deviation per channel within each ABCD block:  %5.2f (full block)\n",
+                        sumMaxDeviationABCD / blockCount));
+                sb.append(String.format(
+                        "   average max deviation per channel within each AB_CD block: %5.2f (divided horizontally)\n",
+                                        sumMaxDeviationAB_CD / blockCount));
+                sb.append(String.format(
+                        "   average max deviation per channel within each AC_BD block: %5.2f (divided vertically)\n",
+                        sumMaxDeviationAC_BD / blockCount));
             }
         }
         return new AnalysisResult(imageFile, getName(), sb.toString());
+    }
+
+    private double getMaxDeviation(long[][] rectRGB, int... entries) {
+        final double[] maxCache = new double[rectRGB[0].length];
+        final long[] channelValues = new long[entries.length];
+
+        for (int channel = 0 ; channel < 3 ; channel++) {
+            for (int i = 0 ; i < entries.length ; i++) {
+                channelValues[i] = rectRGB[channel][entries[i]];
+            }
+            maxCache[channel] = Stats.standardDeviation(channelValues);
+        }
+        return Stats.max(maxCache);
     }
 
     public String getName() {
