@@ -43,14 +43,17 @@ public class ResizeDetectTest extends TestCase {
     }
 
     public void testScaled2() throws IOException {
-        final File SCALED = new File(System.getProperty("java.io.tmpdir"), TEXT.getName() + ".scaled.png");
-        scale(TEXT, SCALED, 2.0);
+        final File SCALED_N = new File(System.getProperty("java.io.tmpdir"), TEXT.getName() + ".scaled_near.png");
+        final File SCALED_B = new File(System.getProperty("java.io.tmpdir"), TEXT.getName() + ".scaled_bicubic.png");
+        scale(TEXT, SCALED_N, 2.0, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        scale(TEXT, SCALED_B, 2.0, AffineTransformOp.TYPE_BICUBIC);
 
-        System.out.println(new ResizeDetect().analyze(SCALED));
+        System.out.println(new ResizeDetect().analyze(SCALED_N));
+        System.out.println(new ResizeDetect().analyze(SCALED_B));
     }
 
     // Bi-linear scale
-    private void scale(File in, File out, double factor) throws IOException {
+    private void scale(File in, File out, double factor, int transformOp) throws IOException {
         BufferedImage before = ImageIO.read(in);
         // http://stackoverflow.com/questions/4216123/how-to-scale-a-bufferedimage
         int w = before.getWidth();
@@ -58,7 +61,7 @@ public class ResizeDetectTest extends TestCase {
         BufferedImage after = new BufferedImage((int) (w*factor), (int) (h*factor), BufferedImage.TYPE_INT_ARGB);
         AffineTransform at = new AffineTransform();
         at.scale(factor, factor);
-        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+        AffineTransformOp scaleOp = new AffineTransformOp(at, transformOp);
         after = scaleOp.filter(before, after);
         ImageIO.write(after, "png", out);
         System.out.println("Bi-linear scaled " + in + " x " + factor + " to " + out);

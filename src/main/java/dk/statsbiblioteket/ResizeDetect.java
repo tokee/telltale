@@ -13,7 +13,7 @@ import java.util.List;
  * The detection looks for x1½ upscaling and x2 upscaling. These two factors has been seen in the
  * wild as 200DPI -> 300DPI and 200DPI -> 400DPI upscales.
  * </p><p>
- * The detection is extremely reliable is no interpolation has been used (the trivial case) and
+ * The detection is extremely reliable if no interpolation has been used (the trivial case) and
  * fairly reliable when linear interpolation has been used. More advances interpolation, notably
  * Bi-cubic/Lanczos leaves fainter signs and detections works poorly for those.
  * </p><p>
@@ -21,6 +21,7 @@ import java.util.List;
  * the collected values are calculated. This is done for all offsets: (0, 0), (0, 1), (1, 0) and (1, 1).
  * If one of the spreads are
  */
+// TODO: x1½
 public class ResizeDetect {
     public static final String USAGE =
             "Attempts to determine if an image has been upscaled 1½ or 2 times.\n"
