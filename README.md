@@ -33,6 +33,7 @@ manipulated so that the super-pixels are offset by 1 pixel horizontally, vertica
 need to check offsets (0, 0), (0, 1), (1, 0) and (1,1).
 
 For each offset, four hypothesises are stated:
+
 1. The super-pixel is made up of uniform pixels: Offset (0, 0) in the sample.
 2. The super-pixel is made up of two pairs of pixels, with the two top pixels being one pair and the
    two bottom pixels being the second pair: Offset (0, 1) in the sample.
