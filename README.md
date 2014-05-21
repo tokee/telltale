@@ -66,11 +66,35 @@ should thus be
 
 So what are low, medium and high values? That depends on the overall image. The higher the overall
 contrast, the higher the spread of the numbers will be. Conversely, images with very low contrast
-will result in lower spread.
+will result in lower spread. The detector tries to make a cheap overall contrast assessment by
+calculating average deviation for 7x7 blocks (7 chosen as it is relatively small and because it
+is a prime, so as not to match the assumed resize factor blocks too often).
 
-A potential improvement would be a calculation of overall contrast in the images - maybe the average
-deviation for 16x16 pixel blocks? This would make it easier to judge whether the hypothesis numbers
-are due to chance or up-scaling.
+The result from an analysis of a non-scaled image is
 
+    Analysis Upscale detector for image /home/te/projects/telltale/target/test-classes/raw/deff_8772880279_184.png:
+    Overall image contrast (average 7x7 block deviation): 20.54
+    2x2 blocks
+    Offset   ABCD  AB_CD  AC_BD
+    (0, 0)   5.91   4.66   4.23
+    (0, 1)   5.91   4.66   4.23
+    (1, 0)   5.91   4.67   4.23
+    (1, 1)   5.92   4.67   4.24
+    Standard deviation of mean standard deviations (all the numbers in the table): 0.74
+
+The result from an analysis of a Nearest-Neighbout-like scaled image is
+
+    Analysis Upscale detector for image /home/te/projects/telltale/target/test-classes/raw/hvide_19681224_1.png:
+    Overall image contrast (average 7x7 block deviation): 40.14
+    2x2 blocks
+    Offset   ABCD  AB_CD  AC_BD
+    (0, 0)  14.93  15.44   6.57
+    (0, 1)  21.22  15.55  16.15
+    (1, 0)   8.68   6.81   6.59
+    (1, 1)  15.77   6.86  16.19
+    Standard deviation of mean standard deviations (all the numbers in the table): 5.10
+
+Notice how it fits extremely well with the hypothesis test matrix, just with a different order due to
+to the super-pixels being offset by (1, 0).
 
 - Toke Eskildsen, te@statsbiblioteket.dk (work) / te@ekot.dk (private)
