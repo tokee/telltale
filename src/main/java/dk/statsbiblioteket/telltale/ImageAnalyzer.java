@@ -12,26 +12,15 @@
  *  limitations under the License.
  *
  */
-package dk.statsbiblioteket;
+package dk.statsbiblioteket.telltale;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
- * Simple container for analysis result.
+ *
  */
-public class AnalysisResult {
-    private final File image;
-    private final String testName;
-    private final String analysis;
-
-    public AnalysisResult(File image, String testName, String analysis) {
-        this.image = image;
-        this.testName = testName;
-        this.analysis = analysis;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Analysis %s for image %s:\n%s", testName, image, analysis);
-    }
+public interface ImageAnalyzer {
+    AnalysisResult analyze(File imageFile, BufferedImage image);
+    String getName();
 }

@@ -4,8 +4,8 @@ telltale
 Detection of resized images, uncalibrated scanners and other problems with digitized images.
 
 
-Up-scaled images
-================
+Biliear up-scaled images
+========================
 
 Up-scaled images is defined here as bitmaps that at some point has been resized to a dimension larger
 than the original. This is sometimes done behind the scenes by scanner software, sometimes explicitly

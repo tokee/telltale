@@ -12,7 +12,7 @@
  *  limitations under the License.
  *
  */
-package dk.statsbiblioteket;
+package dk.statsbiblioteket.telltale;
 
 /**
  * Simple stats with mean, variance & deviation.
@@ -54,12 +54,15 @@ public class Stats {
         return Math.sqrt(variance);
     }
 
+    public static double variance(double[] vals) {
+        return variance(vals, 0, vals.length);
+    }
     /**
      * @param vals the values to process.
      * @return the variance of the values.
      */
     private static double variance(double[] vals, int start, int end) {
-        return variance(vals, 0, vals.length, mean(vals, 0, vals.length));
+        return variance(vals, start, end, mean(vals, start, end));
     }
     /**
      * @param vals the values to process.
