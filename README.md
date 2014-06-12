@@ -4,7 +4,7 @@ telltale
 Detection of resized images, uncalibrated scanners and other problems with digitized images.
 
 
-Biliear up-scaled images
+Up-scaled images
 ========================
 
 Up-scaled images is defined here as bitmaps that at some point has been resized to a dimension larger
