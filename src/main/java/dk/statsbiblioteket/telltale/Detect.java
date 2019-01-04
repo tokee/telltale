@@ -53,7 +53,7 @@ public class Detect {
         List<File> images = new ArrayList<>(args.length);
         for (String arg: args) {
             images.add(new File(arg));
-            if (!images.get(images.size()).exists()) {
+            if (!images.get(images.size()-1).exists()) {
                 throw new FileNotFoundException(
                         "The image '" + images.get(images.size()) + "' could not be located\n" + USAGE);
             }

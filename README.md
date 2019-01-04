@@ -97,4 +97,18 @@ The result from an analysis of a Nearest-Neighbout-like scaled image is
 Notice how it fits extremely well with the hypothesis test matrix, just with a different order due to
 to the super-pixels being offset by (1, 0).
 
-- Toke Eskildsen, te@statsbiblioteket.dk (work) / te@ekot.dk (private)
+## Usage
+
+Build with
+```
+mvn package
+```
+
+Run a standard detection with 
+
+```
+java -cp target/telltale-0.1-SNAPSHOT.jar dk.statsbiblioteket.telltale.Detect src/test/resources/gimp/car_linear_gimp.png
+```
+
+
+- Toke Eskildsen, toes@kb.dk (work) / te@ekot.dk (private)
